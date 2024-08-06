@@ -1,8 +1,6 @@
 
 ## TO RUN DEV ENVIRONMENT
 
-- Aft you  can run the compose file
-
 - Run this commands in the root folder.
 
 ```bash
