@@ -3,7 +3,6 @@
 
 - Aft you  can run the compose file
 
-# IMPORTANT NOTE: 
 - Run this commands in the root folder.
 
 ```bash
@@ -15,7 +14,6 @@ docker compose -f docker-compose.yml up
 
 ## TO RUN PROD ENVIRONMENT
 
-# IMPORTANT NOTE: 
 - Run this commands in the root folder.
 
 ```bash
@@ -23,8 +21,6 @@ docker compose -f docker-compose-prod.yml build
 docker compose -f docker-compose-prod.yml up
 ```
 - Go to your browser `http://localhost:7800`
-
-TODO: For merits, the RUNNING.md also outlines the steps needed to use Kubernetes to run the application with Minikube (or somilar), using kubernetes configuration files created as parts of the passing with merits requirements
 
 ### Deploying the Application to a Kubernetes Cluster
 
