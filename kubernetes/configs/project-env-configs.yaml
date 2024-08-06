@@ -1,0 +1,10 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: project-env
+data:
+  POSTGRES_DB: "database"
+  POSTGRES_HOST: "database-server-dab-p2-13448cc8-f1cc-42a8-ae1a-c56d1edda206"
+  POSTGRES_PORT: "5432"
+  FLYWAY_URL: "jdbc:postgresql://database-server-dab-p2-13448cc8-f1cc-42a8-ae1a-c56d1edda206:5432/database"
+  DENO_DIR: "/app-cache"

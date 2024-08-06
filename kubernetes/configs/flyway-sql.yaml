@@ -1,0 +1,54 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: flyway-sql
+data:
+  V1__Create_initial_schema.sql: |
+    CREATE TABLE COURSES (
+      id SERIAL PRIMARY KEY,
+      title TEXT NOT NULL,
+      summary TEXT NOT NULL,
+      course_order INTEGER NOT NULL,
+      created_on TIMESTAMP WITH TIME ZONE DEFAULT NOW()
+    );
+
+    CREATE TABLE QUESTIONS (
+      id SERIAL PRIMARY KEY,
+      course_id INTEGER REFERENCES COURSES(id),
+      content TEXT NOT NULL,
+      user_uuid TEXT NOT NULL,
+      created_on TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
+      last_vote_time TIMESTAMP WITH TIME ZONE
+    );
+
+    CREATE TABLE QUESTIONS_VOTES (
+      question_id INT REFERENCES QUESTIONS(id),
+      user_uuid TEXT NOT NULL,
+      PRIMARY KEY (question_id, user_uuid)
+    );
+
+    CREATE TABLE ANSWERS (
+      id SERIAL PRIMARY KEY,
+      question_id INTEGER REFERENCES QUESTIONS(id),
+      content TEXT NOT NULL,
+      user_uuid TEXT NOT NULL,
+      created_on TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
+      last_vote_time TIMESTAMP WITH TIME ZONE
+    );
+
+    CREATE TABLE ANSWERS_VOTES (
+      answer_id INT REFERENCES ANSWERS(id),
+      user_uuid TEXT NOT NULL,
+      PRIMARY KEY (answer_id, user_uuid)
+    );
+
+    CREATE INDEX QUESTIONS_COURSE_ID_IDX ON QUESTIONS (course_id);
+    CREATE INDEX ANSWERS_QUESTION_ID_IDX ON ANSWERS (question_id);
+    CREATE INDEX QUESTIONS_ID_COURSE_ID_MOST_RECENT_IDX ON QUESTIONS (course_id, GREATEST(created_on, last_vote_time) DESC, id DESC);
+    CREATE INDEX ANSWERS_ID_QUESTION_ID_MOST_RECENT_IDX ON ANSWERS (question_id, GREATEST(created_on, last_vote_time) DESC, id DESC);
+
+    INSERT INTO COURSES(title, summary, course_order) VALUES 
+      ('Rust', 'This course provides an in-depth introduction to Rust, a systems programming language focused on safety, speed, and concurrency. Learn Rust syntax, ownership concepts, and how to build efficient, reliable software.', 1),
+      ('Web Software Development', 'This course covers the fundamentals of web software development, including HTML, CSS, JavaScript, and various web development frameworks. Students will learn how to create dynamic, responsive web applications.', 2),
+      ('Scalable Web Applications', 'Learn how to design and build scalable web applications capable of handling large amounts of traffic and data. This course focuses on architecture, performance optimization, and the use of cloud services.', 3),
+      ('Introduction to DevOps', 'An introductory course on DevOps principles and practices, including continuous integration, continuous delivery, infrastructure as code, and monitoring. Students will gain hands-on experience with popular DevOps tools and techniques.', 4);

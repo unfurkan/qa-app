@@ -1,0 +1,35 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: llm-api
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: llm-api
+  template:
+    metadata:
+      labels:
+        app: llm-api
+    spec:
+      containers:
+      - name: llm-api
+        image: llm-api:latest
+        imagePullPolicy: Never
+        ports:
+        - containerPort: 7000
+        envFrom:
+        - configMapRef:
+            name: project-env
+---              
+apiVersion: v1
+kind: Service
+metadata:
+  name: llm-api
+spec:
+  selector:
+    app: llm-api
+  ports:
+  - protocol: TCP
+    port: 7000
+    targetPort: 7000

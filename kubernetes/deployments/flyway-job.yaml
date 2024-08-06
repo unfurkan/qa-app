@@ -1,0 +1,44 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: flyway
+  namespace: default
+spec:
+  template:
+    metadata:
+      labels:
+        app: flyway
+    spec:
+      restartPolicy: Never
+      containers:
+      - name: flyway
+        image: flyway/flyway:9.11.0-alpine
+        imagePullPolicy: IfNotPresent
+        command: ["flyway", "-connectRetries=60", "-baselineOnMigrate=true", "migrate"]
+        envFrom:
+        - configMapRef:
+            name: project-env
+        env:
+        - name: FLYWAY_URL
+          valueFrom:
+            configMapKeyRef:
+              name: project-env
+              key: FLYWAY_URL
+        - name: FLYWAY_USER
+          valueFrom:
+            secretKeyRef:
+              name: postgres-secret
+              key: username
+        - name: FLYWAY_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: postgres-secret
+              key: password
+        volumeMounts:
+        - name: flyway-sql-volume
+          mountPath: /flyway/sql
+      volumes:
+      - name: flyway-sql-volume
+        configMap:
+          name: flyway-sql
+  backoffLimit: 2

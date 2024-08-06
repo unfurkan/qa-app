@@ -1,0 +1,1 @@
+K6 results can be found in PERFORMANCE_TEST_RESULTS.md file

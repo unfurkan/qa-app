@@ -1,0 +1,50 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: qa-api
+spec:
+  selector:
+    matchLabels:
+      app: qa-api
+  template:
+    metadata:
+      labels:
+        app: qa-api
+    spec:
+      containers:
+      - name: qa-api
+        image: qa-api:latest
+        imagePullPolicy: Never
+        ports:
+        - containerPort: 7777
+        resources:
+          requests: 
+            cpu: 100m
+          limits: 
+            cpu: 200m
+        envFrom:
+        - configMapRef:
+            name: project-env
+        env:
+        - name: POSTGRES_USER
+          valueFrom:
+            secretKeyRef:
+              name: postgres-secret
+              key: username
+        - name: POSTGRES_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: postgres-secret
+              key: password
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: qa-api
+spec:
+  selector:
+    app: qa-api
+  ports:
+  - protocol: TCP
+    port: 7777
+    targetPort: 7777

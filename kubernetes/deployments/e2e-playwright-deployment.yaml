@@ -1,0 +1,19 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: e2e-playwright
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: e2e-playwright
+  template:
+    metadata:
+      labels:
+        app: e2e-playwright
+    spec:
+      containers:
+      - name: e2e-playwright
+        image: e2e-playwright
+        imagePullPolicy: Never
+        command: ["/bin/true"]

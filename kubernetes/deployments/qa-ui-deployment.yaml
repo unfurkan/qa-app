@@ -1,0 +1,36 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: qa-ui
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: qa-ui
+  template:
+    metadata:
+      labels:
+        app: qa-ui
+    spec:
+      containers:
+      - name: qa-ui
+        image: qa-ui:latest
+        imagePullPolicy: Never
+        ports:
+        - containerPort: 3000
+        envFrom:
+        - configMapRef:
+            name: project-env
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: qa-ui
+spec:
+  selector:
+    app: qa-ui
+  ports:
+  - protocol: TCP
+    port: 3000
+    targetPort: 3000
