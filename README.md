@@ -26,7 +26,7 @@ The online Q&A platform is intended for questions and answers on coursework.
    - The database schema is designed to be normalized to ensure data integrity and minimize redundancy. Each entity (courses, questions, answers, votes) is stored in its own table, with foreign key relationships to maintain referential integrity.
 
 2. **Indexes for Performance Optimization**:
-   - Indexes have been strategically placed on columns that are frequently used in query filters and joins. This includes indexes on `course_id` in the `QUESTIONS` table and `question_id` in the `ANSWERS` table. Composite indexes are also used to optimize queries that sort by recent activity for paging end points.
+   - Indexes have been placed on columns that are frequently used in query filters and joins. This includes indexes on `course_id` in the `QUESTIONS` table and `question_id` in the `ANSWERS` table. Composite indexes are also used to optimize queries that sort by recent activity for paging end points.
 
 3. **Denormalization for Recent Activity**:
    - To enhance performance for common queries that fetch the most recent questions or answers based on activity, `last_vote_time` is stored directly in the `QUESTIONS` and `ANSWERS` tables. This avoids the need for complex joins and subqueries.
