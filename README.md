@@ -93,16 +93,12 @@ CREATE TABLE ANSWERS_VOTES (
   PRIMARY KEY (answer_id, user_uuid)
 );
 
--- This index is created to speed up queries that filter questions based on their associated course.
 CREATE INDEX QUESTIONS_COURSE_ID_IDX ON QUESTIONS (course_id);
 
--- This index optimizes the retrieval of answers for a specific question.
 CREATE INDEX ANSWERS_QUESTION_ID_IDX ON ANSWERS (question_id);
 
--- This index supports queries that need to fetch the most recent questions for a course, ordered by the most recent activity (either creation or last vote time). Used in infinite scrolling cursor based pagination
 CREATE INDEX QUESTIONS_ID_COURSE_ID_MOST_RECENT_IDX ON QUESTIONS (course_id, GREATEST(created_on, last_vote_time) DESC, id DESC);
 
--- This index is designed to optimize queries that fetch the most recent answers for a question, ordered by the most recent activity. Used in infinite scrolling cursor based pagination
 CREATE INDEX ANSWERS_ID_QUESTION_ID_MOST_RECENT_IDX ON ANSWERS (question_id, GREATEST(created_on, last_vote_time) DESC, id DESC);
 ```
 
